@@ -1,0 +1,31 @@
+<a href="/groups">DashBoard </a>
+
+<h2><%=@group.name%></h2>
+<p><%=@group.description%></p>
+<% if current_user.groups_joined.include?(@group)%>
+Created by You<hr>
+<%else%>
+Created by  <%=  @group.member.first_name%><hr>
+<%end%>
+
+<P><strong>Group Members</strong></P>
+<%=@members.each do |m|%>
+	<%=m%>
+	<br> <br>
+<% end%>
+
+<% if current_user.groups_joined.include?(@group)%>
+<form action="/memberships" method="post">
+				<input type="hidden" name="_method" value="delete">
+				<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+				<input type="hidden" name="group_id" value="<%= @group.id %>">
+				<input type="submit" value="Leave">
+			</form>
+	<%else%> 
+		<form action="/memberships" method="post">
+				<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+				<input type="hidden" name="group_id" value="<%= @group.id %>">
+				<input type="submit" value="Join">
+		</form>
+
+	<% end %>
